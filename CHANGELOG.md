@@ -1,26 +1,18 @@
 # Sardroid Airtrack — Changelog
 
-## 1.0.0 — 2026-07-06
+## 1.0.2 (in sviluppo)
 
-Prima release pubblica.
+Prima versione. Migrazione del plugin da `sardroid_server/tools/airtrack/` a progetto indipendente in `D:\sardroid_airtrack\`.
 
-### Core
-- Poller OpenSky con auth **OAuth2 client credentials** (raccomandato) e **Basic auth**.
-- Filtri configurabili: bbox, quota massima, escludi a terra, velocità minima.
-- Sweep esplicito verso Sardroid Server: al poll successivo, i velivoli fuori bbox spariscono dalla mappa senza aspettare il timer di 60 s server-side.
-- **Multi-target Sardroid**: `sardroid_url` accetta stringa o lista. Fanout automatico su tutti i target attivi; re-probe ogni 30 s per gestire target che salgono/scendono a runtime (es. dev + prod).
-
-### Interfaccia
-- UI Tkinter con toolbar OpenSky / Area / Flotta / Preset / Lingua.
-- **i18n**: italiano, inglese, spagnolo. Cambio lingua **a caldo** senza riavvio (Poller resta attivo).
-- Editor visuale del bbox su mappa Leaflet.
-- Editor visuale della flotta con auto-lookup ICAO24 da [adsbdb.com](https://www.adsbdb.com).
-- Import / export preset flotta in JSON.
-- Rate limit OpenSky visibile in barra di stato.
-- Icona applicazione coerente con Sardroid Server.
-
-### Distribuzione
-- Installer Inno Setup **dual-mode**: single-user (nessun admin) o all-users (admin), a scelta.
-- Notifica update in-app: banner con link diretto al download quando disponibile una versione più recente.
-- Backup progetto integrato (`backup.bat`).
-- Build concatenata: `build_exe.bat` produce exe Nuitka + installer Inno Setup in un unico lancio.
+- UI Tkinter con toolbar 🔑 OpenSky, 🗺️ Area, 🛩️ Flotta, 📥 Importa, 📤 Esporta preset, 🌐 Lingua
+- Auth: Basic auth OpenSky + OAuth2 client credentials (con import da `credentials.json`)
+- Discovery bbox visuale con toggle modalità disegno
+- Anagrafica flotta editable con auto-lookup adsbdb.com
+- Sweep esplicito: al poll successivo, i tracker fuori bbox spariscono da Sardroid
+- Rate limit remaining visibile nella UI
+- Doppio livello: sweep dal plugin (immediato) + safety net server (60s)
+- **i18n**: interfaccia in IT / EN / ES, campo `language` in config, selettore in toolbar (richiede riavvio per applicare)
+- **Multi-target Sardroid**: `sardroid_url` può essere una stringa (single-target) o una lista. Se sono configurati dev + prod, Airtrack sonda entrambi e inietta su quelli up. Re-probe automatico ogni 30s: se un Sardroid parte dopo Airtrack (o si spegne), il fanout si adatta al prossimo poll.
+- **Icona applicazione**: TAZ (stessa di Sardroid Server) usata come icona exe, finestra, shortcut Start Menu, installer.
+- **Build concatenata**: `build_exe.bat` produce ora anche l'installer se Inno Setup 6 è disponibile (single-shot: exe + setup).
+- Batch di supporto: start_dev, backup, run
