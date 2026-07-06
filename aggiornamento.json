@@ -1,0 +1,15 @@
+{
+  "versione": "1.0.0",
+  "url": "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
+  "note": [
+    "Prima release pubblica di Sardroid Airtrack",
+    "Poller OpenSky con auth OAuth2 e Basic",
+    "Editor visuale bbox di discovery su mappa Leaflet",
+    "Anagrafica flotta editable con auto-lookup adsbdb.com",
+    "Sweep esplicito verso Sardroid Server (rimozione immediata al fuori-bbox)",
+    "Multi-target: fanout dev + prod, re-probe automatico ogni 30 s",
+    "Interfaccia i18n con IT / EN / ES (cambio a caldo, senza riavvio)",
+    "Notifica update in-app con banner e link installer",
+    "Installer dual-mode Inno Setup (single-user o all-users, a scelta dell'utente)"
+  ]
+}
