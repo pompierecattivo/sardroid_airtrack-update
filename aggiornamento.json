@@ -1,10 +1,10 @@
 {
-  "versione": "1.0.4",
-  "url": "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
-  "note": [
-    "Security fix: rimosse credenziali OpenSky (client_id, client_secret) dal file airtrack.config.json distribuito.",
-    "Introdotto override runtime airtrack.config.local.json per credenziali di sviluppo (escluso da build, backup, git).",
-    "Aggiunto guard nel release.bat che blocca la pubblicazione se il config sorgente contiene credenziali reali.",
-    "Le release 1.0.0 / 1.0.1 / 1.0.3 sono state rimosse: contenevano credenziali OpenSky dell'autore, ora ruotate."
-  ]
+    "versione":  "1.0.5",
+    "url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
+    "note":  [
+                 "Rimosse credenziali OpenSky (client_id, client_secret) dal file `airtrack.config.json` distribuito.",
+                 "Introdotto override runtime `airtrack.config.local.json` per credenziali di sviluppo (escluso da build, backup, git).",
+                 "Aggiunto guard nel `release.bat` che blocca la pubblicazione se il config sorgente contiene credenziali reali.",
+                 "Le release 1.0.0 / 1.0.1 / 1.0.3 sono state rimosse: contenevano credenziali OpenSky dell'autore, ora ruotate."
+             ]
 }
