@@ -1,5 +1,5 @@
 {
-    "versione":  "1.0.6",
+    "versione":  "1.0.7",
     "url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
     "note":  [
                  "Rimosse credenziali OpenSky (client_id, client_secret) dal file `airtrack.config.json` distribuito.",
