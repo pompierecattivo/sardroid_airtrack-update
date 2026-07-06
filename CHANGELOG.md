@@ -1,6 +1,6 @@
 # Sardroid Airtrack — Changelog
 
-## 1.0.2 (in sviluppo)
+## 1.0.3 (in sviluppo)
 
 Prima versione. Migrazione del plugin da `sardroid_server/tools/airtrack/` a progetto indipendente in `D:\sardroid_airtrack\`.
 

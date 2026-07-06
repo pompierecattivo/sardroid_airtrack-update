@@ -1,18 +1,18 @@
 {
-  "versione": "1.0.1",
-  "url": "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
-  "note": [
-    "UI Tkinter con toolbar 🔑 OpenSky, 🗺️ Area, 🛩️ Flotta, 📥 Importa, 📤 Esporta preset, 🌐 Lingua",
-    "Auth: Basic auth OpenSky + OAuth2 client credentials (con import da credentials.json)",
-    "Discovery bbox visuale con toggle modalità disegno",
-    "Anagrafica flotta editable con auto-lookup adsbdb.com",
-    "Sweep esplicito: al poll successivo, i tracker fuori bbox spariscono da Sardroid",
-    "Rate limit remaining visibile nella UI",
-    "Doppio livello: sweep dal plugin (immediato) + safety net server (60s)",
-    "i18n: interfaccia in IT / EN / ES, campo language in config, selettore in toolbar (richiede riavvio per applicare)",
-    "Multi-target Sardroid: sardroid_url può essere una stringa (single-target) o una lista. Se sono configurati dev + prod, Airtrack sonda entrambi e inietta su quelli up. Re-probe automatico ogni 30s: se un Sardroid parte dopo Airtrack (o si spegne), il fanout si adatta al prossimo poll.",
-    "Icona applicazione: TAZ (stessa di Sardroid Server) usata come icona exe, finestra, shortcut Start Menu, installer.",
-    "Build concatenata: build_exe.bat produce ora anche l'installer se Inno Setup 6 è disponibile (single-shot: exe + setup).",
-    "Batch di supporto: start_dev, backup, run"
-  ]
+    "versione":  "1.0.3",
+    "url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
+    "note":  [
+                 "UI Tkinter con toolbar 🔑 OpenSky, 🗺️ Area, 🛩️ Flotta, 📥 Importa, 📤 Esporta preset, 🌐 Lingua",
+                 "Auth: Basic auth OpenSky + OAuth2 client credentials (con import da `credentials.json`)",
+                 "Discovery bbox visuale con toggle modalità disegno",
+                 "Anagrafica flotta editable con auto-lookup adsbdb.com",
+                 "Sweep esplicito: al poll successivo, i tracker fuori bbox spariscono da Sardroid",
+                 "Rate limit remaining visibile nella UI",
+                 "Doppio livello: sweep dal plugin (immediato) + safety net server (60s)",
+                 "**i18n**: interfaccia in IT / EN / ES, campo `language` in config, selettore in toolbar (richiede riavvio per applicare)",
+                 "**Multi-target Sardroid**: `sardroid_url` può essere una stringa (single-target) o una lista. Se sono configurati dev + prod, Airtrack sonda entrambi e inietta su quelli up. Re-probe automatico ogni 30s: se un Sardroid parte dopo Airtrack (o si spegne), il fanout si adatta al prossimo poll.",
+                 "**Icona applicazione**: TAZ (stessa di Sardroid Server) usata come icona exe, finestra, shortcut Start Menu, installer.",
+                 "**Build concatenata**: `build_exe.bat` produce ora anche l'installer se Inno Setup 6 è disponibile (single-shot: exe + setup).",
+                 "Batch di supporto: start_dev, backup, run"
+             ]
 }
