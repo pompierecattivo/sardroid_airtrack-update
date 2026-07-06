@@ -1,6 +1,15 @@
 # Sardroid Airtrack — Changelog
 
-## 1.0.3 (in sviluppo)
+## 1.0.4 - 2026-07-06
+
+Security fix.
+
+- Rimosse credenziali OpenSky (client_id, client_secret) dal file `airtrack.config.json` distribuito.
+- Introdotto override runtime `airtrack.config.local.json` per credenziali di sviluppo (escluso da build, backup, git).
+- Aggiunto guard nel `release.bat` che blocca la pubblicazione se il config sorgente contiene credenziali reali.
+- Le release 1.0.0 / 1.0.1 / 1.0.3 sono state rimosse: contenevano credenziali OpenSky dell'autore, ora ruotate.
+
+## 1.0.3 (rimossa - security)
 
 Prima versione. Migrazione del plugin da `sardroid_server/tools/airtrack/` a progetto indipendente in `D:\sardroid_airtrack\`.
 
