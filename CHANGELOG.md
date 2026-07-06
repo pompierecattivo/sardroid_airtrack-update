@@ -1,6 +1,6 @@
 # Sardroid Airtrack — Changelog
 
-## 1.0.5 - 2026-07-06
+## 1.0.6 - 2026-07-06
 
 Security fix.
 
