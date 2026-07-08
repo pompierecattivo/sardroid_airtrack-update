@@ -1,10 +1,16 @@
 {
-    "versione":  "1.0.9",
+    "versione":  "1.1.0",
     "url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
     "note":  [
-                 "Rimosse credenziali OpenSky (client_id, client_secret) dal file `airtrack.config.json` distribuito.",
-                 "Introdotto override runtime `airtrack.config.local.json` per credenziali di sviluppo (escluso da build, backup, git).",
-                 "Aggiunto guard nel `release.bat` che blocca la pubblicazione se il config sorgente contiene credenziali reali.",
-                 "Le release 1.0.0 / 1.0.1 / 1.0.3 sono state rimosse: contenevano credenziali OpenSky dell'autore, ora ruotate."
+                 "Il dialog \"🗺️ Area\" ora contiene anche i filtri Discovery editabili direttamente dalla UI (prima solo da file config): quota massima (m), velocità minima (kn), escludi aeromobili a terra.",
+                 "Aggiunte due soglie di alert configurabili:",
+                 "**Alert area bbox** (km², default 100 000): al salvataggio del bbox, se l'area supera la soglia viene mostrato un dialog di conferma. Guardrail contro configurazioni che sondino aree troppo ampie e stressino OpenSky/Sardroid.",
+                 "**Alert aeromobili per poll** (default 500): se un poll ritorna più aeromobili della soglia, la riga stats in barra di stato diventa arancione con prefisso `⚠ TROPPI AEROMOBILI (>N)`. Advisory, non blocca il poll.",
+                 "Le soglie non bloccano mai il flusso: sono avvisi per aiutare a evitare configurazioni troppo aggressive.",
+                 "Chiavi i18n IT/EN/ES per tutti i nuovi testi.",
+                 "`airtrack.config.json` distribuito nell'installer parte con `known_aircraft: []` — nessuna flotta pre-configurata. Ogni nuova installazione è pulita.",
+                 "La cartella `presets/` distribuita nell'installer contiene solo un README esplicativo — nessun preset di flotta reale.",
+                 "Le flotte reali di sviluppo (es. flotta VVF italiana) sono spostate in `_dev_presets/` locale, escluso da installer, build, backup e git.",
+                 "`SECRET GUARD` in `release.ps1` esteso: la release viene bloccata se il config sorgente contiene `known_aircraft` non vuoto o se `presets/` contiene file `.json`, prevenendo leak di dati sensibili come già accade per le credenziali."
              ]
 }

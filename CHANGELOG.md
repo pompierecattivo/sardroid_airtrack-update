@@ -1,5 +1,23 @@
 # Sardroid Airtrack — Changelog
 
+## 1.1.0 - 2026-07-08
+
+Filtri Discovery editabili + soglie alert + installer pulito.
+
+### Filtri Discovery
+- Il dialog "🗺️ Area" ora contiene anche i filtri Discovery editabili direttamente dalla UI (prima solo da file config): quota massima (m), velocità minima (kn), escludi aeromobili a terra.
+- Aggiunte due soglie di alert configurabili:
+  - **Alert area bbox** (km², default 100 000): al salvataggio del bbox, se l'area supera la soglia viene mostrato un dialog di conferma. Guardrail contro configurazioni che sondino aree troppo ampie e stressino OpenSky/Sardroid.
+  - **Alert aeromobili per poll** (default 500): se un poll ritorna più aeromobili della soglia, la riga stats in barra di stato diventa arancione con prefisso `⚠ TROPPI AEROMOBILI (>N)`. Advisory, non blocca il poll.
+- Le soglie non bloccano mai il flusso: sono avvisi per aiutare a evitare configurazioni troppo aggressive.
+- Chiavi i18n IT/EN/ES per tutti i nuovi testi.
+
+### Installer pulito
+- `airtrack.config.json` distribuito nell'installer parte con `known_aircraft: []` — nessuna flotta pre-configurata. Ogni nuova installazione è pulita.
+- La cartella `presets/` distribuita nell'installer contiene solo un README esplicativo — nessun preset di flotta reale.
+- Le flotte reali di sviluppo (es. flotta VVF italiana) sono spostate in `_dev_presets/` locale, escluso da installer, build, backup e git.
+- `SECRET GUARD` in `release.ps1` esteso: la release viene bloccata se il config sorgente contiene `known_aircraft` non vuoto o se `presets/` contiene file `.json`, prevenendo leak di dati sensibili come già accade per le credenziali.
+
 ## 1.0.9 - 2026-07-06
 
 Security fix.
