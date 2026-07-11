@@ -1,5 +1,52 @@
 # Sardroid Airtrack — Changelog
 
+## 1.2.0 - 2026-07-11
+
+Filtri famiglia Noti/Sconosciuti, astrazione DataProvider generica, dialog "Fornitore dati" riscritto per supportare piu' fornitori.
+
+### Filtri famiglia (Noti / Sconosciuti)
+- Due nuove checkbox nella toolbar: **Noti** e **Sconosciuti** (default entrambi on).
+- Agiscono sia sulla UI (righe nascoste nella tabella aeromobili) sia sull'ingest (le entry filtrate NON vengono POST-ate a Sardroid). Un aeromobile in anagrafica passa se "Noti" e' on, un aeromobile fuori anagrafica passa se "Sconosciuti" e' on.
+- Auto-save on-change nelle chiavi `discovery.include_known` / `discovery.include_unknown` del config.
+- Guardrail UX: disattivare entrambi mette il poller in muto, quindi Airtrack riaccende automaticamente "Noti" con log di warning.
+- Toolbar riorganizzata su due righe per compensare l'aggiunta dei toggle. Poll interval e i due filtri stanno nella seconda riga.
+
+### DataProvider generico + refactor
+- Nuovo package [`providers/`](providers/) con l'astrazione `DataProvider` (`fetch_states`, `rate_limit_snapshot`, `test_connection`, `credentials_schema`, `min_poll_seconds`).
+- OpenSky spostato in `providers/opensky.py` come primo provider concreto (`OpenSkyProvider`). Nessuna modifica funzionale: OAuth2, Basic, anonimo, retry token, tracking rate limit sono tutti li'.
+- `airtrack.py::fetch_states(cfg)` sceglie il provider corrente in base a `cfg["source"]["type"]` (default `"opensky"`). Alias `fetch_opensky` mantenuto per retro-compat.
+- `state_to_entry` refactor: ora accetta un `AircraftState` dict normalizzato (chiavi `icao24`, `lat`, `lon`, `altitude_m`, `speed_ms`, ...). Retro-compat con liste OpenSky per test/POC standalone.
+- Il campo `extra.source` propagato al server e' preso da `cfg["source"]["type"]` (era hardcoded `"opensky"`), cosi' Sardroid puo' distinguere l'upstream.
+- `last_rate_limit` diventa un proxy che legge dal provider corrente al momento dell'accesso (retro-compat con `getattr(core, "last_rate_limit")`).
+
+### Provider concreti aggiuntivi (6 totali in 1.2.0)
+- **adsb.fi** (`providers/adsbfi.py`) — feed comunitario ADS-B, nessuna auth. Base `https://opendata.adsb.fi/api/v2`.
+- **airplanes.live** (`providers/airplaneslive.py`) — altro feed comunitario ADS-B, nessuna auth. Base `https://api.airplanes.live/v2`.
+- **FlightAware AeroAPI** (`providers/flightaware.py`) — servizio commerciale con free trial. Auth via header `x-apikey`. Endpoint bbox nativo `/flights/search/positions`. Altitudine in centinaia di piedi (FL), timestamp ISO 8601. `min_poll_seconds = 30`.
+- **Aviation Edge** (`providers/aviationedge.py`) — commerciale con free trial ~100 req/giorno. Auth via query-string `?key=`. Nessun endpoint bbox nativo, filtro client sul risultato globale. Struttura JSON annidata (`geography.altitude`, `speed.horizontal`), altitudine gia' in metri, velocita' in km/h. `min_poll_seconds = 60`.
+- Nuovo `providers/_readsb_common.py` con logica condivisa per i due feed comunitari (readsb-based): `bbox_to_center_radius()`, `normalize_readsb_state()`, `extract_now_epoch()`. Un solo posto per conversioni ft→m, knots→m/s, ft/min→m/s.
+- I due provider readsb-based convertono il `discovery.bbox` in cerchio circoscritto (capped 250 nm) al centro geometrico, perche' le loro API v2 accettano `lat/{lat}/lon/{lon}/{radius_nm}`. Eventuali aeromobili raccolti fuori dal bbox reale vengono filtrati a valle.
+- Rate limit soft ~1 req/s per adsb.fi/airplanes.live → `min_poll_seconds = 15`. Alla selezione via dialog, il poll interval viene bumpato automaticamente al valore piu' basso >= min_poll_seconds tra i preset (15/30/60).
+- Il dialog "Fornitore dati" gestisce automaticamente tutti e 5 senza modifiche: e' completamente pilotato da `credentials_schema` (nessun codice hardcoded per provider).
+- `test_connection` implementato per tutti e 5: chiamata leggera per verificare auth+connettivita' inline nel dialog.
+- Test A/B live tra adsb.fi e airplanes.live (bbox Piemonte): lo stesso volo (SWR29K, icao24 `4b1803`) rilevato da entrambi con quota entro <10m di differenza e speed identica — l'astrazione `DataProvider` regge, gli `AircraftState` sono interscambiabili.
+- **FlightAware e Aviation Edge sono NON testati live**: entrambi non offrono un trial gratuito accessibile senza carta di credito e piano attivo, quindi durante lo sviluppo non e' stato possibile verificare che i dati reali corrispondano alla documentazione dell'API. Il codice segue le specifiche pubbliche ma **potrebbe richiedere rifiniture** al primo uso reale (es. campi rinominati, formato timestamp diverso, ordine di risposta). Chi ha una API key valida puo' testare con "Test connessione" nel dialog e segnalare eventuali discrepanze.
+- **Ricevitore ADS-B locale** (`providers/readsb_local.py`) — nuovo provider per feed self-hosted. Si connette a un endpoint HTTP `aircraft.json` esposto da readsb / dump1090 / PiAware / tar1090 sulla LAN. Nessuna auth. Riusa il modulo `_readsb_common.py`. Config: `source.endpoint_url` (default `http://localhost:8080/data/aircraft.json`). Vantaggi: latenza <1s, no rate limit, no dipendenza da internet, copertura precisa della zona d'interesse. Ideale se si installa un Raspberry Pi con dongle SDR (~50€ una tantum).
+
+### Dialog "Fornitore dati" (rinominato da "OpenSky")
+- Il bottone toolbar "🔑 OpenSky" diventa "📡 Fornitore dati".
+- Il vecchio `airtrack_account_dialog.py` (specifico OpenSky) e' sostituito da `airtrack_provider_dialog.py` generico.
+- Dropdown "Provider" in cima: oggi mostra solo OpenSky ma pronto ad accogliere nuovi provider (adsb.fi, airplanes.live, ...) semplicemente aggiungendoli al registro `providers/PROVIDERS`.
+- Dropdown "Modalita' auth" con 3 gruppi per OpenSky (Nessuna / OAuth2 / Basic). I field vengono generati dinamicamente dal `credentials_schema` del provider.
+- Tasto "Test connessione" usa `provider.test_connection()` in thread separato con risultato inline.
+- Import di `credentials.json` mantenuto per OpenSky OAuth (bottone visibile solo quando la modalita' selezionata usa i campi `oauth.client_id`/`oauth.client_secret`).
+- Password toggle 👁 per tutti i campi marcati `secret: True`.
+
+### Retro-compatibilita'
+- Config esistenti con `source.type = "opensky"` + credenziali OAuth/Basic funzionano identici a prima.
+- Caller esterni che usano `core.fetch_opensky` o `core.state_to_entry(list, ...)` continuano a funzionare.
+- La release 1.2.0 non introduce provider nuovi (solo scaffold): l'utente vede lo stesso flusso OpenSky, con UI leggermente diversa.
+
 ## 1.1.0 - 2026-07-08
 
 Filtri Discovery editabili + soglie alert + installer pulito.
