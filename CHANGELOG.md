@@ -1,5 +1,14 @@
 # Sardroid Airtrack — Changelog
 
+## 1.2.2 - 2026-07-11
+
+Rilascio di manutenzione + omogeneizzazione release pipeline.
+
+### Fix: aggiornamento.json non piu' verboso
+- `release.ps1` ora cap-pa le note di release a **6 bullet massimo** invece di estrarre tutti quelli del CHANGELOG.
+- Aggiunta automatica di `changelog_url` che punta al CHANGELOG completo su GitHub, cosi' chi vuole leggere tutto lo storico esteso ha il link nella modal update ("Note complete →").
+- Aggiornato `build_exe.bat` (opzionale, non ancora applicato: `--nofollow-import-to=PIL.ImageQt` per silenziare warning informativo Nuitka).
+
 ## 1.2.1 - 2026-07-11
 
 Fix UX minori + differenziazione visiva rispetto ad Aistrack.

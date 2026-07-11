@@ -1,11 +1,10 @@
 {
-    "versione":  "1.2.1",
+    "versione":  "1.2.2",
     "url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
+    "changelog_url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/blob/main/CHANGELOG.md",
     "note":  [
-                 "La label in alto a destra (\"OpenSky · N req rimaste\") diventava **completamente vuota** quando l'utente selezionava un provider senza `remaining` esposto negli header (adsb.fi, airplanes.live, ricevitore ADS-B locale). Il vecchio `_RateLimitProxy` iterava tutte le istanze e il primo che aveva `remaining=None` faceva sparire la label.",
-                 "Fix: la label ora legge direttamente dal provider corrente tramite `core.get_provider(self.cfg).rate_limit_snapshot()`. Se il provider non ha un contatore numerico, mostra `display_name · quota_label` (es. \"Ricevitore ADS-B locale (readsb/dump1090) · no rate limit (LAN)\").",
-                 "Copre tutti i 6 provider: comportamento vecchio per OpenSky/FlightAware (contatore numerico verde/giallo/rosso), fallback descrittivo per adsb.fi/airplanes.live/readsb_local/aviationedge.",
-                 "Aggiunta **striscia identificativa rossa VVF alta 6px in cima alla finestra**. Marker sempre visibile per distinguere Airtrack a colpo d'occhio da Aistrack (che ha una striscia ciano).",
-                 "**AppUserModelID esplicito** su Windows (`PompiereCattivo.SardroidAirtrack.1.2`): senza questo, Windows raggruppa le finestre Python di Airtrack e Aistrack sotto un'unica voce nella barra applicazioni. Con l'AUMID esplicito ognuno ha il proprio spazio in taskbar + start menu + jumplist."
+                 "`release.ps1` ora cap-pa le note di release a **6 bullet massimo** invece di estrarre tutti quelli del CHANGELOG.",
+                 "Aggiunta automatica di `changelog_url` che punta al CHANGELOG completo su GitHub, cosi' chi vuole leggere tutto lo storico esteso ha il link nella modal update (\"Note complete →\").",
+                 "Aggiornato `build_exe.bat` (opzionale, non ancora applicato: `--nofollow-import-to=PIL.ImageQt` per silenziare warning informativo Nuitka)."
              ]
 }
