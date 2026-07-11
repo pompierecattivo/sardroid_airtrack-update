@@ -1,10 +1,9 @@
 {
-    "versione":  "1.2.2",
+    "versione":  "1.2.3",
     "url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/releases/latest/download/SardroidAirtrack_Setup.exe",
     "changelog_url":  "https://github.com/pompierecattivo/sardroid_airtrack-update/blob/main/CHANGELOG.md",
     "note":  [
-                 "`release.ps1` ora cap-pa le note di release a **6 bullet massimo** invece di estrarre tutti quelli del CHANGELOG.",
-                 "Aggiunta automatica di `changelog_url` che punta al CHANGELOG completo su GitHub, cosi' chi vuole leggere tutto lo storico esteso ha il link nella modal update (\"Note complete →\").",
-                 "Aggiornato `build_exe.bat` (opzionale, non ancora applicato: `--nofollow-import-to=PIL.ImageQt` per silenziare warning informativo Nuitka)."
+                 "Stesso bug osservato in Sardroid Server v9.0.7. `get_current_version()` leggeva prima `Path(sys.executable).parent/VERSION` (esterno all'exe, non toccato dall'auto-update) e solo dopo `Path(__file__).parent/VERSION` (bundle Nuitka).",
+                 "Fix: inverto l'ordine — prima il bundle interno, poi il fallback esterno. Cosi' dopo un auto-update la versione nell'header risulta allineata all'exe reale."
              ]
 }

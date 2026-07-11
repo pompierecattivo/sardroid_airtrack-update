@@ -1,5 +1,11 @@
 # Sardroid Airtrack — Changelog
 
+## 1.2.3 - 2026-07-11
+
+### Fix: versione app non aggiornata dopo auto-update
+- Stesso bug osservato in Sardroid Server v9.0.7. `get_current_version()` leggeva prima `Path(sys.executable).parent/VERSION` (esterno all'exe, non toccato dall'auto-update) e solo dopo `Path(__file__).parent/VERSION` (bundle Nuitka).
+- Fix: inverto l'ordine — prima il bundle interno, poi il fallback esterno. Cosi' dopo un auto-update la versione nell'header risulta allineata all'exe reale.
+
 ## 1.2.2 - 2026-07-11
 
 Rilascio di manutenzione + omogeneizzazione release pipeline.
