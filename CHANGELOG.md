@@ -1,5 +1,18 @@
 # Sardroid Airtrack — Changelog
 
+## 1.2.1 - 2026-07-11
+
+Fix UX minori + differenziazione visiva rispetto ad Aistrack.
+
+### Fix: rate_label non piu' vuota per provider senza contatore numerico
+- La label in alto a destra ("OpenSky · N req rimaste") diventava **completamente vuota** quando l'utente selezionava un provider senza `remaining` esposto negli header (adsb.fi, airplanes.live, ricevitore ADS-B locale). Il vecchio `_RateLimitProxy` iterava tutte le istanze e il primo che aveva `remaining=None` faceva sparire la label.
+- Fix: la label ora legge direttamente dal provider corrente tramite `core.get_provider(self.cfg).rate_limit_snapshot()`. Se il provider non ha un contatore numerico, mostra `display_name · quota_label` (es. "Ricevitore ADS-B locale (readsb/dump1090) · no rate limit (LAN)").
+- Copre tutti i 6 provider: comportamento vecchio per OpenSky/FlightAware (contatore numerico verde/giallo/rosso), fallback descrittivo per adsb.fi/airplanes.live/readsb_local/aviationedge.
+
+### Differenziazione visiva rispetto ad Aistrack
+- Aggiunta **striscia identificativa rossa VVF alta 6px in cima alla finestra**. Marker sempre visibile per distinguere Airtrack a colpo d'occhio da Aistrack (che ha una striscia ciano).
+- **AppUserModelID esplicito** su Windows (`PompiereCattivo.SardroidAirtrack.1.2`): senza questo, Windows raggruppa le finestre Python di Airtrack e Aistrack sotto un'unica voce nella barra applicazioni. Con l'AUMID esplicito ognuno ha il proprio spazio in taskbar + start menu + jumplist.
+
 ## 1.2.0 - 2026-07-11
 
 Filtri famiglia Noti/Sconosciuti, astrazione DataProvider generica, dialog "Fornitore dati" riscritto per supportare piu' fornitori.
