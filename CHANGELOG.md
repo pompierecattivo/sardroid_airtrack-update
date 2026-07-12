@@ -1,5 +1,11 @@
 # Sardroid Airtrack — Changelog
 
+## 1.2.4 - 2026-07-11
+
+### Fix: tasto "Avvia" inefficace dopo "Ferma" se il worker precedente e' ancora appeso
+- **Bug**: dopo aver premuto **Ferma**, se per qualsiasi motivo il thread `PollerWorker` era ancora bloccato (es. `fetch_states` in retry lungo su rete lenta, POST verso Sardroid in timeout), premere **Avvia** non riavviava il poll. Motivo: `_on_start` faceva `if self.poller and self.poller.is_alive(): return` — bloccante anche se `stop()` era gia' stato invocato.
+- **Fix** in [airtrack_ui.py::_on_start()](airtrack_ui.py): il check ora ignora un worker che ha gia' ricevuto `stop()` (`_stop_flag.is_set()`). Se il worker precedente e' ancora vivo *ma* fermato, ne creiamo comunque uno nuovo. Il vecchio e' un thread daemon: uscira' da solo quando la chiamata bloccante ritorna, o al piu' tardi alla chiusura app.
+
 ## 1.2.3 - 2026-07-11
 
 ### Fix: versione app non aggiornata dopo auto-update
