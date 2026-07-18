@@ -1,5 +1,19 @@
 # Sardroid Airtrack — Changelog
 
+## 1.2.5 - 2026-07-18
+
+### Fix: le impostazioni non persistevano nell'exe compilato (onefile)
+- **Bug**: chiudendo e riaprendo l'app compilata (`.exe`) si perdevano flotta (`known_aircraft`), provider dati + credenziali, lingua, poll interval, bbox — ogni modifica salvata dalla UI. In dev da sorgente invece tutto persisteva (dettaglio che smaschera la causa).
+- **Causa**: build Nuitka `--onefile` estrae tutto in una cartella temporanea `%TEMP%\onefile_*` e la **cancella alla chiusura**. Il config veniva risolto con `Path(__file__).parent`, che nell'exe onefile punta a quella temp volatile: i salvataggi tecnicamente riuscivano ma sparivano al riavvio. Il config impacchettato va trattato solo come *seed* di default, mai come file scrivibile.
+- **Fix** in [airtrack_ui.py](airtrack_ui.py): nuova `_resolve_config_path()`. Se si gira come exe compilato (`sys.frozen` / `__compiled__`), il config scrivibile vive in `%APPDATA%\SardroidAirtrack\airtrack.config.json`, seedato al primo avvio dal default impacchettato. In dev da sorgente il comportamento storico resta invariato (config nel progetto, `.local` preferito se presente). Fallback sul seed se `%APPDATA%` è assente/non scrivibile. Correzione in un unico punto: tutti i salvataggi UI usano già `self.config_path` derivato da lì.
+- **Nota utenti già installati**: al primo avvio della 1.2.5 ripartono da config seed in `%APPDATA%`. Le loro modifiche precedenti erano comunque già perse a ogni chiusura, quindi non c'è nulla da migrare.
+
+### Fix: modale "Area" tagliava i parametri in basso
+- Il dialog bbox aveva la mappa (`expand=True`) packata prima di filtri e toolbar: con finestra troppo bassa i parametri Discovery e i bottoni venivano spinti fuori dal bordo inferiore e tagliati. Ora filtri + toolbar sono packati dal basso (`side="bottom"`) prima della mappa, così è la mappa a comprimersi, non i parametri. Aggiunto `minsize(820, 680)`.
+
+### Poll interval: 15/30/60 (era 20/30/60)
+- Il valore minimo selezionabile scende da 20s a **15s** (allineato al `min_poll_seconds` dei feed comunitari readsb-based). Predefinito invariato a 30s.
+
 ## 1.2.4 - 2026-07-11
 
 ### Fix: tasto "Avvia" inefficace dopo "Ferma" se il worker precedente e' ancora appeso
